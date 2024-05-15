@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from "./screens/home";
 import { Student } from './screens/student';
 import { Icon } from 'react-native-paper';
+import { useContext } from 'react';
+import { StudentContext } from './contexts/student.context';
 
 export type BottomNavigationParamsList = {
     home: undefined;
@@ -14,6 +16,8 @@ export type BottomNavigationParamsList = {
 const Tab = createBottomTabNavigator<BottomNavigationParamsList>();
 
 export default function AppRoutes() {
+
+    const { student } = useContext(StudentContext)
 
     return (
         <Tab.Navigator
@@ -34,6 +38,7 @@ export default function AppRoutes() {
                         fontSize: 16
                     },
                     tabBarStyle: {
+                        display: student ? "none" : "flex",
                         backgroundColor: "#1c1b1f",
                     }
                 }
@@ -52,7 +57,7 @@ export default function AppRoutes() {
 
 
 export type StackParamsList = {
-    home: undefined
+    homepage: undefined
     student: undefined
 }
 
@@ -72,14 +77,23 @@ function HomeRoutes() {
                 }
             }}
         >
-            <Stack.Screen name="home" options={{
-                headerTitle: "InnovateTech",
-                headerTitleAlign: "center",
-            }} component={Home} />
-            <Stack.Screen name="student" options={{
-                headerTitle: "InnovateTech",
-                headerTitleAlign: "center",
-            }} component={Student} />
+            <Stack.Screen
+
+                name="homepage"
+                options={{
+                    headerTitle: "InnovateTech",
+                    headerTitleAlign: "center",
+                }} component={Home} />
+            <Stack.Screen name="student"
+                options={{
+                    headerStyle: {
+                        backgroundColor: "#1B1C1F",
+                    },
+                    headerTintColor: "white",
+                    headerTitle: "InnovateTech",
+                    headerTitleAlign: "center",
+                }}
+                component={Student} />
         </Stack.Navigator>
     );
 }

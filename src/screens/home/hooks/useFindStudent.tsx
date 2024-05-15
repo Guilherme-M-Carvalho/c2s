@@ -28,7 +28,7 @@ export function useFindStudent() {
                 method: "get", url: "/", params: {
                     page: students.page,
                     results: 20,
-                    exc: "login,location",
+                    exc: "login",
                     seed: "students"
                 }
             })

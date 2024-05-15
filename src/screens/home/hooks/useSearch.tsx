@@ -8,9 +8,9 @@ export function useSearch() {
 
     const [filter, setFilter] = useState<FilterProps>({
         contains: true,
-        gender: true,
+        gender: false,
         name: true,
-        nasc: true,
+        nasc: false,
         modal: false
     })
 
