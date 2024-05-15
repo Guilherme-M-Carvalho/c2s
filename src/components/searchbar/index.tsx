@@ -6,7 +6,13 @@ const SearchbarComponent = ({ ...props }: SearchbarProps) => {
     return (
         <Searchbar
             {...props}
-            placeholder="Search"
+            style={{
+                backgroundColor: "transparent",
+                borderWidth: 1,
+                borderColor: "#1c1b1f",
+                flex: 1
+            }}
+            placeholder="Busca..."
         />
     );
 };

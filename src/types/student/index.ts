@@ -1,9 +1,9 @@
 export type RootProps = {
-    results: Result[]
+    results: StudentProps[]
     info?: Info
 }
 
-export interface Result {
+export interface StudentProps {
     gender: string
     name: Name
     location: Location
