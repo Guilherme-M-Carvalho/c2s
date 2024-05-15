@@ -33,7 +33,7 @@ export function Student() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "row",
-            marginBottom: 90
+            marginBottom: 100
         }}>
             <SearchbarComponent inputStyle={{
                 color: "white"
@@ -63,7 +63,7 @@ export function Student() {
             </Menu>
             <View style={{
                 position: "absolute",
-                bottom: -90,
+                bottom: -100,
                 backgroundColor: "white",
                 alignItems: "center",
                 borderRadius: 76,
