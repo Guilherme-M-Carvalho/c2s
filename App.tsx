@@ -10,22 +10,13 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <PaperProvider>
-        <NavigationContainer>
-          <StudentProvider>
+        <StudentProvider>
+          <NavigationContainer>
             <StatusBar style="auto" />
             <BottomNavigate />
-          </StudentProvider>
-        </NavigationContainer>
+          </NavigationContainer>
+        </StudentProvider>
       </PaperProvider>
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
