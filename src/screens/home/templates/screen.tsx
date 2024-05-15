@@ -1,24 +1,35 @@
 import { ScrollView, Text, View } from "react-native";
 import { Avatar, Checkbox, Divider, List, Menu, Title } from "react-native-paper";
 import { useFindStudent } from "../hooks/useFindStudent";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SearchbarComponent } from "../../../components/searchbar";
 import { useSearch } from "../hooks/useSearch";
 import { ActivityIndicator } from "react-native-paper";
 import { useNavigate } from "../hooks/useNavigate";
 import { IconButtonFilter } from "../../../components/iconButtonFilter";
+import { StudentContext } from "../../../contexts/student.context";
 
 export function Screen() {
 
+    const { handleFindStudents } = useContext(StudentContext)
     const { handleFindStudent, handleSetStudent, students, loading, handleNextPage } = useFindStudent()
     const { onChangeSearch, search, handleSearch, filter, handleChangeFilter } = useSearch()
     const filterStudents = handleSearch(students.students)
     const { handleNavigateStudent } = useNavigate()
+    const [cache, setCache] = useState<string>("")
 
     useEffect(() => {
         (async () => {
-            const students = await handleFindStudent()
-            handleSetStudent(students)
+            const cache = await handleFindStudents()
+            if(!cache.length){
+
+                const students = await handleFindStudent()
+                handleSetStudent(students)
+            } else {
+                // handleSetStudent(cache)
+                
+            }
+            setCache("cache\n"+JSON.stringify(cache))
         })()
     }, [handleFindStudent])
 
@@ -48,6 +59,9 @@ export function Screen() {
             </Menu>
 
         </View>
+        <Text>
+            {cache}
+        </Text>
         <ScrollView onScroll={(e) => {
             const compar = e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height
             if (e.nativeEvent.contentOffset.y == compar && !loading && !search) {

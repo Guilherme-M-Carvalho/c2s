@@ -1,10 +1,12 @@
-import { useCallback, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { api } from "../../../services/api"
 import { StudentProps, RootProps } from "../../../types/student"
+import { StudentContext } from "../../../contexts/student.context"
 
 export function useFindStudent() {
 
     const [students, setStudents] = useState<{ students: StudentProps[], page: number }>({ page: 1, students: [] })
+    const { handleInsertStudents } = useContext(StudentContext)
     const [loading, setLoading] = useState<boolean>(false)
 
     const handleSetStudent = (student: StudentProps[]) => {
@@ -33,6 +35,9 @@ export function useFindStudent() {
                 }
             })
             response.results = data.results
+            if(students.page === 1){
+                await handleInsertStudents(data.results)
+            }
         } catch (error) {
             console.log(error);
         }

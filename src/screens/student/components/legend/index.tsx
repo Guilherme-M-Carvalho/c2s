@@ -1,5 +1,4 @@
 import { View, Text } from "react-native";
-// import { Text } from "react-native-paper";
 
 type LegendProps = {
     title: string;
