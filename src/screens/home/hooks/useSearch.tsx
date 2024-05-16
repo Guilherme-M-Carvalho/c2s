@@ -28,9 +28,7 @@ export function useSearch() {
     const handleSearch = (students: StudentProps[]): StudentProps[] => {
         return students.filter(obj => {
             const name = `${obj.name.title} ${obj.name.first} ${obj.name.last}`
-            const nasc = new Intl.DateTimeFormat('pt-BR', {
-                dateStyle: 'short',
-            }).format(new Date(obj.dob.date))
+            const nasc = obj.dob.date
             if (!search) {
                 return obj
             }

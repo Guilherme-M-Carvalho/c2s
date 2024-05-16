@@ -1,34 +1,91 @@
 import * as SQLite from 'expo-sqlite';
 import { StudentProps } from '../types/student';
+import * as FileSystem from 'expo-file-system';
+
+export type StudentsSQL = StudentSQL[]
+
+export interface StudentSQL {
+    city: string
+    country: string
+    email: string
+    first: string
+    gender: string
+    id: string
+    image_large: string
+    image_medium: string
+    last: string
+    nasc: string
+    nationality: string
+    phone: string
+    postcode: string
+    state: string
+    street_name: string
+    street_number: number
+    title: string
+}
+
 
 export function useSqlLite() {
-
-    const handleReturnDatabase = async () => {
-        return await SQLite.openDatabaseAsync('InnovateTech');
-    }
+    const db = SQLite.useSQLiteContext();
 
     const handleCreateTableStudents = async () => {
-        const db = await handleReturnDatabase()
-        await db.execAsync(`
-        PRAGMA journal_mode = WAL;
-        CREATE TABLE IF NOT EXISTS students (id TEXT PRIMARY KEY NOT NULL, title TEXT NOT NULL, first TEXT NOT NULL, last TEXT NOT NULL, email TEXT NOT NULL, gender TEXT NOT NULL, nasc TEXT NOT NULL, phone TEXT NOT NULL, nationality TEXT NOT NULL, street_name TEXT NOT NULL, street_number INTEGER NOT NULL, city TEXT NOT NULL, state TEXT NOT NULL, postcode INTEGER NOT NULL, country TEXT NOT NULL);
-        `);
+
+        // await db.runAsync(`delete from student where id not null`)
+        // await db.runAsync(`DROP TABLE student;`)
+        // try{
+
+        //     await db.runAsync(`DROP TABLE students;`)
+        // } catch(err){
+        //     console.log(err);
+
+        // }
     }
 
     const handleInsertStudents = async (students: StudentProps[]) => {
-        const db = await handleReturnDatabase()
-        const arrInsert = students.map(el => {
-            return `INSERT INTO students (id, title, first, last, email, gender, nasc, phone, nationality, street_name, street_number, city, state, postcode, country) VALUES ('${el.id.value}', '${el.name.title}', '${el.name.first}', '${el.name.last}', '${el.email}', '${el.gender}', '${new Intl.DateTimeFormat('pt-BR', {
-                dateStyle: 'short',
-            }).format(new Date(el.dob.date))}', '${el.phone}', '${el.nat}', '${el.location.street.name}', ${el.location.street.number}, '${el.location.city}', '${el.location.state}', ${el.location.postcode}, ${el.location.country});`
-        })
-        const exec = arrInsert.join("")
-        await db.execAsync(exec)
+
+
+        const arrInsert = await Promise.all(students.map(async (el) => {
+
+            let urilMedium: string = ""
+            let urilLarge: string = ""
+
+            try {
+                const { uri } = await FileSystem.downloadAsync(
+                    String(el.picture?.medium),
+                    FileSystem.documentDirectory + String(el.id.value) + el.name.first + ".png",
+
+                );
+                const { uri: uriLarge } = await FileSystem.downloadAsync(
+                    String(el.picture?.large),
+                    FileSystem.documentDirectory + String(el.id.value) + el.name.first + ".png",
+                );
+
+                urilMedium = String(uri)
+                urilLarge = String(uriLarge)
+                console.log('Finished downloading to ', uri, uriLarge);
+            } catch (e) {
+                console.error(e);
+            }
+            return `INSERT INTO student (id, title, first, last, email, gender, nasc, phone, nationality, street_name, street_number, city, state, postcode, country, image_medium, image_large) VALUES ('${el.id.value}', '${el.name.title}', '${el.name.first}', '${el.name.last}', '${el.email}', '${el.gender}', '${el.dob.date}', '${el.phone}', '${el.nat}', '${el.location.street.name}', ${el.location.street.number}, '${el.location.city}', '${el.location.state}', '${el.location.postcode}', '${el.location.country}', '${urilMedium}', '${urilLarge}');`
+        }))
+
+        // const exec = arrInsert.join("")
+        // console.log(exec);
+        try {
+
+            await Promise.all(arrInsert.map(async (el) => {
+                await db.runAsync(el)
+            }))
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 
-    const handleFindStudents = async() => {
-        const db = await handleReturnDatabase()
-        const allRows = await db.getAllAsync('SELECT * FROM students');
+    const handleFindStudents = async () => {
+        const allRows = await db.getAllAsync<StudentSQL>('SELECT * FROM student');
+        // console.log({allRows});
+
         return allRows
     }
 
