@@ -117,8 +117,11 @@ export function Screen() {
                 )}
             </List.Section>
             {loading &&
-                <View style={{ paddingVertical: 32 }}>
+                <View style={{ paddingVertical: 32, flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                     <ActivityIndicator color="#1c1b1f" />
+                    <Text style={{textAlign: "center"}}>
+                        CARREGANDO MAIS
+                    </Text>
                 </View>
             }
         </ScrollView>
