@@ -30,13 +30,12 @@ export function useSqlLite() {
 
     const handleCreateTableStudents = async () => {
 
-        // await db.runAsync(`delete from student where id not null`)
-        // await db.runAsync(`DROP TABLE student;`)
+        // await db.runAsync(`delete from students where id not null`)
+        // await db.runAsync(`DROP TABLE students;`)
         // try{
 
         //     await db.runAsync(`DROP TABLE students;`)
         // } catch(err){
-        //     console.log(err);
 
         // }
     }
@@ -62,11 +61,10 @@ export function useSqlLite() {
 
                 urilMedium = String(uri)
                 urilLarge = String(uriLarge)
-                console.log('Finished downloading to ', uri, uriLarge);
             } catch (e) {
                 console.error(e);
             }
-            return `INSERT INTO student (id, title, first, last, email, gender, nasc, phone, nationality, street_name, street_number, city, state, postcode, country, image_medium, image_large) VALUES ('${el.id.value}', '${el.name.title}', '${el.name.first}', '${el.name.last}', '${el.email}', '${el.gender}', '${el.dob.date}', '${el.phone}', '${el.nat}', '${el.location.street.name}', ${el.location.street.number}, '${el.location.city}', '${el.location.state}', '${el.location.postcode}', '${el.location.country}', '${urilMedium}', '${urilLarge}');`
+            return `INSERT INTO students (id, title, first, last, email, gender, nasc, phone, nationality, street_name, street_number, city, state, postcode, country, image_medium, image_large) VALUES ('${el.id.value}', '${el.name.title}', '${el.name.first}', '${el.name.last}', '${el.email}', '${el.gender}', '${el.dob.date}', '${el.phone}', '${el.nat}', '${el.location.street.name}', ${el.location.street.number}, '${el.location.city}', '${el.location.state}', '${el.location.postcode}', '${el.location.country}', '${urilMedium}', '${urilLarge}');`
         }))
 
         // const exec = arrInsert.join("")
@@ -83,9 +81,7 @@ export function useSqlLite() {
     }
 
     const handleFindStudents = async () => {
-        const allRows = await db.getAllAsync<StudentSQL>('SELECT * FROM student');
-        // console.log({allRows});
-
+        const allRows = await db.getAllAsync<StudentSQL>('SELECT * FROM students');
         return allRows
     }
 

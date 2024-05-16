@@ -20,26 +20,18 @@ export function Screen() {
 
     useEffect(() => {
         (async () => {
-            console.log(students.page);
-            
-            if(students.page >= 1){
+            if(students.page > 1){
                 const students = await handleFindStudent()
                 handleSetStudent(students)
                 return
             }
             const cache = await handleFindStudents()
-
-            console.log(cache);
-            
             if (!cache.length) {
                 const students = await handleFindStudent()
                 handleSetStudent(students)
             } else {
-                console.log(Array.isArray(cache), cache.length);
-                // console.log(cache)
                 handleSetStudentBySql(cache)
             }
-            // setCache("cache\n" + JSON.stringify(cache))
         })()
     }, [handleFindStudent])
 
@@ -48,6 +40,7 @@ export function Screen() {
     }}>
         <View style={{
             padding: 16,
+            paddingVertical: 0,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
@@ -74,13 +67,12 @@ export function Screen() {
         </Text>
         <ScrollView onScroll={(e) => {
             const compar = e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height
-            console.log("aaaa next",Math.floor(e.nativeEvent.contentOffset.y) == Math.floor(compar));
             if (Math.floor(e.nativeEvent.contentOffset.y) == Math.floor(compar) && !loading && !search) {
-                
                 handleNextPage()
             }
         }} style={{
             padding: 16,
+            paddingVertical: 0,
             marginBottom: 8
         }}>
             <List.Section style={{
