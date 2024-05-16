@@ -21,7 +21,6 @@ export function Student() {
         }
     }, [isFocused])
 
-
     return <View style={{
         flex: 1
     }}>
@@ -33,7 +32,7 @@ export function Student() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "row",
-            marginBottom: 90
+            marginBottom: 100
         }}>
             <SearchbarComponent inputStyle={{
                 color: "white"
@@ -63,7 +62,7 @@ export function Student() {
             </Menu>
             <View style={{
                 position: "absolute",
-                bottom: -90,
+                bottom: -100,
                 backgroundColor: "white",
                 alignItems: "center",
                 borderRadius: 76,
@@ -94,10 +93,7 @@ export function Student() {
                 {name && <Legend title="Nome" description={String(`${student?.name.title} ${student?.name.first} ${student?.name.last}`)} />}
                 {email && <Legend title="E-mail" description={String(`${student?.email}`)} />}
                 {gender && <Legend title="Gênero" description={String(`${student?.gender}`)} />}
-                {nasc && <Legend title="Data de nascimento" description={String(`${new Intl.DateTimeFormat('pt-BR', {
-                    dateStyle: 'short',
-                }).format(new Date(String(student?.dob.date)))
-                    }`)} />}
+                {nasc && <Legend title="Data de nascimento" description={String(student?.dob.date)} />}
                 {phone && <Legend title="Telefone" description={String(`${student?.phone}`)} />}
                 {nationality && <Legend title="Nacionalidade" description={String(`${student?.nat}`)} />}
                 {address && <Legend title="Endereço" description={String(`${student?.location.street.name}, ${student?.location.street.number}, ${student?.location.city} - ${student?.location.state} - ${student?.location.postcode}, ${student?.location.country}`)} />}

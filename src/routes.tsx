@@ -74,7 +74,8 @@ function HomeRoutes() {
                 contentStyle: {
                     borderWidth: 0,
                     backgroundColor: "#fafafa"
-                }
+                },
+                headerShadowVisible: false
             }}
         >
             <Stack.Screen

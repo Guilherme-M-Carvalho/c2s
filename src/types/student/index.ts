@@ -8,9 +8,9 @@ export interface StudentProps {
     name: Name
     location: Location
     email: string
-    login: Login
+    login?: Login
     dob: Dob
-    registered: Registered
+    registered?: Registered
     phone: string
     cell: string
     id: Id

@@ -55,9 +55,7 @@ export function useFilter() {
             visible.gender = handleVerifyVisible(String(student?.gender))
         }
         if (filter.nasc) {
-            visible.nasc = handleVerifyVisible(new Intl.DateTimeFormat('pt-BR', {
-                dateStyle: 'short',
-            }).format(new Date(String(student?.dob.date))))
+            visible.nasc = handleVerifyVisible(String(student?.dob.date))
         }
         if (filter.phone) {
             visible.phone = handleVerifyVisible(String(student?.phone))

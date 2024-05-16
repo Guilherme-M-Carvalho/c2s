@@ -1,24 +1,37 @@
 import { ScrollView, Text, View } from "react-native";
 import { Avatar, Checkbox, Divider, List, Menu, Title } from "react-native-paper";
 import { useFindStudent } from "../hooks/useFindStudent";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SearchbarComponent } from "../../../components/searchbar";
 import { useSearch } from "../hooks/useSearch";
 import { ActivityIndicator } from "react-native-paper";
 import { useNavigate } from "../hooks/useNavigate";
 import { IconButtonFilter } from "../../../components/iconButtonFilter";
+import { StudentContext } from "../../../contexts/student.context";
 
 export function Screen() {
 
-    const { handleFindStudent, handleSetStudent, students, loading, handleNextPage } = useFindStudent()
+    const { handleFindStudents } = useContext(StudentContext)
+    const { handleSetStudentBySql, handleFindStudent, handleSetStudent, students, loading, handleNextPage } = useFindStudent()
     const { onChangeSearch, search, handleSearch, filter, handleChangeFilter } = useSearch()
     const filterStudents = handleSearch(students.students)
     const { handleNavigateStudent } = useNavigate()
+    const [cache, setCache] = useState<string>("")
 
     useEffect(() => {
         (async () => {
-            const students = await handleFindStudent()
-            handleSetStudent(students)
+            if(students.page > 1){
+                const students = await handleFindStudent()
+                handleSetStudent(students)
+                return
+            }
+            const cache = await handleFindStudents()
+            if (!cache.length) {
+                const students = await handleFindStudent()
+                handleSetStudent(students)
+            } else {
+                handleSetStudentBySql(cache)
+            }
         })()
     }, [handleFindStudent])
 
@@ -27,6 +40,7 @@ export function Screen() {
     }}>
         <View style={{
             padding: 16,
+            paddingVertical: 0,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
@@ -48,13 +62,18 @@ export function Screen() {
             </Menu>
 
         </View>
+        <Text>
+            {cache}
+        </Text>
         <ScrollView onScroll={(e) => {
             const compar = e.nativeEvent.contentSize.height - e.nativeEvent.layoutMeasurement.height
-            if (e.nativeEvent.contentOffset.y == compar && !loading && !search) {
+            if (Math.floor(e.nativeEvent.contentOffset.y) == Math.floor(compar) && !loading && !search) {
                 handleNextPage()
             }
         }} style={{
-            padding: 16
+            padding: 16,
+            paddingVertical: 0,
+            marginBottom: 8
         }}>
             <List.Section style={{
                 gap: 16
@@ -81,16 +100,16 @@ export function Screen() {
                                     {student.gender}
                                 </Text>
                                 <Text>
-                                    {new Intl.DateTimeFormat('pt-BR', {
-                                        dateStyle: 'short',
-                                    }).format(new Date(student.dob.date))}
+                                    {
+                                        student.dob.date
+                                    }
                                 </Text>
                             </View>
                         }
                         left={props =>
                             <Avatar.Image
                                 size={50}
-                                source={{ uri: student.picture.medium }}
+                                source={{ uri: student?.picture?.medium }}
                                 style={{ backgroundColor: "#1B1C1F" }}
                             />
                         }
