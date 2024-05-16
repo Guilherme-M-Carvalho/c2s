@@ -8,9 +8,6 @@ import { StudentContext } from './contexts/student.context';
 
 export type BottomNavigationParamsList = {
     home: undefined;
-    ser: undefined
-    cost: undefined
-    report: undefined
 }
 
 const Tab = createBottomTabNavigator<BottomNavigationParamsList>();
@@ -25,6 +22,7 @@ export default function AppRoutes() {
                 backgroundColor: "#fafafa",
             }}
             screenOptions={(props) => {
+
                 return {
                     tabBarActiveTintColor: "#fff",
                     headerShown: false,
@@ -38,7 +36,7 @@ export default function AppRoutes() {
                         fontSize: 16
                     },
                     tabBarStyle: {
-                        display: student ? "none" : "flex",
+                        display: (student) ? "none" : "flex",
                         backgroundColor: "#1c1b1f",
                     }
                 }
@@ -66,6 +64,7 @@ const Stack = createNativeStackNavigator<StackParamsList>();
 function HomeRoutes() {
     return (
         <Stack.Navigator
+            initialRouteName='homepage'
             screenOptions={{
                 headerShown: true,
                 headerStyle: {
